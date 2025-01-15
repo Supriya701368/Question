@@ -1,0 +1,440 @@
+/* General body styles */
+body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Container for sidebar and main content */
+.container {
+    display: flex;
+    min-height: 100vh;
+    transition: margin-left 0.3s;
+
+}
+
+/* Sidebar Styles */
+.sidebar {
+    width: 300px;
+    padding: 20px;
+    background-color: #2a2a37;
+    color: #fff;
+    border-right: 3px solid #61dafb;
+    height: 100vh;
+    overflow-y: auto;
+    box-shadow: 4px 0px 8px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    transition: transform 0.3s ease-in-out;
+}
+
+.sidebar h3 {
+    font-size: 22px;
+    color: #61dafb;
+    text-transform: uppercase;
+    border-bottom: 2px solid #61dafb;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.sidebar select {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    margin-top: 15px;
+    border: 2px solid #61dafb;
+    border-radius: 5px;
+    background-color: #34344a;
+    color: #fff;
+    outline: none;
+    transition: border 0.3s;
+}
+.sidebar-toggle {
+    font-size: 30px;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background: none;
+    border: none;
+    color: #333;
+    cursor: pointer;
+  }
+.sidebar select:hover,
+.sidebar select:focus {
+    border-color: #90e4ff;
+}
+.sidebar.open {
+    transform: translateX(0);
+    /* Sidebar is visible */
+  }
+  
+  .sidebar.closed {
+    transform: translateX(-100%);
+    /* Sidebar is hidden */
+  }
+/* Checkbox group */
+.checkbox-group {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.checkbox-group label {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    cursor: pointer;
+    font-size: 18px;
+    position: relative;
+    padding-left: 30px;
+    color: #fff;
+}
+
+.checkbox-group input[type="checkbox"] {
+    appearance: none;
+    position: absolute;
+    left: 0;
+    width: 22px;
+    height: 22px;
+    border: 2px solid #61dafb;
+    border-radius: 5px;
+    background-color: transparent;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.checkbox-group input[type="checkbox"]:checked {
+    background-color: #61dafb;
+    border-color: #61dafb;
+}
+
+.checkbox-group input[type="checkbox"]:checked::after {
+    content: "✔";
+    color: white;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.checkbox-group input[type="checkbox"]:hover {
+    background-color: rgba(97, 218, 251, 0.2);
+    border-color: #90e4ff;
+}
+
+.checkbox-group input[type="checkbox"]:focus {
+    outline: 2px solid #90e4ff;
+    outline-offset: 2px;
+}
+.toggler {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+  }
+
+/* Sidebar toggle button (hidden by default) */
+.sidebar-toggle {
+    display: none;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.sidebar-toggle:focus {
+    outline: none;
+}
+
+/* Main content styles */
+.main-content {
+    flex: 1;
+    padding: 30px;
+    background-color: #f9f9f9;
+    margin-left: 300px; /* Ensures space for the sidebar */
+}
+
+.main-content h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+    font-weight: bold;
+}
+
+/* Card styles for Question section */
+.question-card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 20px 0;
+    padding: 20px;
+    transition: transform 0.3s ease;
+}
+
+.question-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.question-card h2 {
+    font-size: 22px;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.question-card p {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+.question-card .options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.question-card .options label {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    cursor: pointer;
+    font-size: 16px;
+    color: #333;
+}
+
+.question-card .options input[type="radio"] {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #61dafb;
+    border-radius: 50%;
+    margin-right: 10px;
+    transition: all 0.3s ease-in-out;
+}
+
+.question-card .options input[type="radio"]:checked {
+    background-color: #61dafb;
+    border-color: #61dafb;
+}
+
+.question-card .options input[type="radio"]:hover {
+    background-color: rgba(97, 218, 251, 0.2);
+}
+
+/* Solution section */
+.solution-card {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.solution-card h3 {
+    font-size: 20px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.solution-card p {
+    font-size: 16px;
+    color: #555;
+}
+
+.mcq-container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    max-width: 600px;
+    margin: auto;
+}
+
+.question-wrapper {
+    margin-top: 10px;
+}
+
+.error-container {
+    color: red;
+    display: block;
+}
+
+.question-item {
+    margin-bottom: 30px;
+}
+
+.question-image-container,
+.solution-image-container {
+    margin-bottom: 20px;
+}
+
+.box {
+    border: 1px dashed #ccc;
+    padding: 10px;
+    text-align: center;
+    margin-top: 10px;
+}
+.marks-container {
+    display: flex;
+    align-items: center;
+    margin: 44px 0;
+    font-size: 14px; /* Decrease label font size */
+  }
+  
+  .marks-container label {
+    margin-right: 10px;
+    font-weight: bold;
+    color: #ead8d8#333; /* Optional: Change label color */
+  }
+  
+  .marks-container input {
+    width: 50px; /* Decrease input width */
+    height: 25px; /* Decrease input height */
+    margin-right: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 2px 5px;
+    font-size: 12px; /* Adjust input font size */
+  }
+  
+
+.box.active {
+    border-color: #28a745;
+}
+
+.zoom-img {
+    max-width: 100%;
+    height: auto;
+}
+
+.remove-button {
+    margin-top: 10px;
+    background-color: #ff4c4c;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.remove-button:hover {
+    background-color: #ff2a2a;
+}
+
+.option-item {
+    margin-bottom: 20px;
+}
+
+.option-label {
+    display: flex;
+    align-items: center;
+}
+
+.radio-input {
+    margin-right: 10px;
+}
+
+.option-box {
+    border: 1px dashed #ccc;
+    padding: 10px;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.answer-container {
+    margin-bottom: 20px;
+}
+
+.answer-input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.add-button,
+.save-button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.add-button {
+    background-color: #28a745;
+    color: white;
+}
+
+.save-button {
+    background-color: #007bff;
+    color: white;
+    margin-top: 20px;
+}
+
+.add-button:hover {
+    background-color: #218838;
+}
+
+.save-button:hover {
+    background-color: #0056b3;
+}
+
+/* Sidebar responsiveness */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        transform: translateX(-100%);
+    }
+
+    .sidebar-toggle {
+        display: block;
+    }
+
+    .main-content {
+        margin-left: 0;
+        padding: 15px;
+    }
+
+    .sidebar.show {
+        transform: translateX(0);
+    }
+
+    /* Reduce padding and font size for mobile */
+    .sidebar select {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .checkbox-group {
+        gap: 15px;
+    }
+
+    .sidebar h3 {
+        font-size: 18px;
+    }
+
+    .checkbox-group label {
+        font-size: 16px;
+    }
+}
+
+/* Toggle sidebar visibility */
+.sidebar.show {
+    transform: translateX(0);
+}
