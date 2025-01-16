@@ -274,7 +274,7 @@ const MSQ = ({
                                 <input
                                     readOnly
                                     type="text"
-                                    value={question.answer ? question.answer.join(", ") : ""}  // Ensure answer is an array before calling join
+                                    value={question.answer}  // Ensure answer is an array before calling join
                                     onChange={(e) => handleAnswerChange(index, e.target.value)}
                                     className="answer-input"
                                 />

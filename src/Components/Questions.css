@@ -53,6 +53,11 @@ body {
     outline: none;
     transition: border 0.3s;
 }
+
+.option-box.clicked {
+    background-color: thistle; /* Apply thistle color when clicked */
+    border-color: #6a0dad; /* Optional: Change border color for a better visual */
+}
 .sidebar-toggle {
     font-size: 30px;
     position: fixed;

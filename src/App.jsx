@@ -170,10 +170,48 @@ const App = () => {
   };
   const handleAnswerChange = (index, newAnswer) => {
     const updatedQuestions = [...Questions];
-    updatedQuestions[index].answer = newAnswer;
-     console.log(updatedQuestions)
+
+    // Helper function to convert numbers to alphabets
+    const numberToAlphabet = (number) => {
+        if (typeof number === "number") {
+            return String.fromCharCode(64 + number); // Convert 1 -> A, 2 -> B
+        }
+        return number;
+    };
+
+    const question = updatedQuestions[index];
+
+    if (question.type === "MSQ") {
+        const currentAnswers = question.answer || [];
+        const convertedAnswer = numberToAlphabet(newAnswer);
+
+        // Toggle the converted answer in the MSQ answers array
+        if (currentAnswers.includes(convertedAnswer)) {
+            question.answer = currentAnswers.filter(
+                (answer) => answer !== convertedAnswer
+            );
+        } else {
+            question.answer = [...currentAnswers, convertedAnswer];
+        }
+
+        // Ensure at least two options are selected
+        if (question.answer.length < 2) {
+            alert("Please select at least two options.");
+        }
+    } else if (question.type === "MCQ") {
+        // Convert and set the answer directly for MCQ
+        question.answer = numberToAlphabet(newAnswer);
+    } else {
+        // For other types like NIT or TRUE, set the answer directly without conversion
+        question.answer = newAnswer;
+    }
+
+    console.log(updatedQuestions);
     setQuestions(updatedQuestions);
 };
+
+
+
 
 
   

@@ -16,7 +16,13 @@ const MCQ = ({
     includeSolution,
     addOptionE,
 }) => {
-   
+    const handleBoxClick = (e) => {
+        // Remove the `clicked` class from all elements
+        document.querySelectorAll('.option-box').forEach((box) => box.classList.remove('clicked'));
+
+        // Add the `clicked` class to the clicked element
+        e.currentTarget.classList.add('clicked');
+    };
 
     return (
         <div className="mcq-container">
@@ -40,8 +46,8 @@ const MCQ = ({
                             <div className="question-image-container">
                                 <h3>Paste Image for Question</h3>
                                 <div
-                                    className="option-box"
-                                    onPaste={(e) => {
+                                onClick={handleBoxClick}
+                                onPaste={(e) => {
                                         const clipboardItems = e.clipboardData.items;
                                         for (let i = 0; i < clipboardItems.length; i++) {
                                             if (clipboardItems[i].type.startsWith("image/")) {
@@ -79,7 +85,8 @@ const MCQ = ({
                             {includeParagraph && (
                                 <div className="paragraph-section">
                                     <strong>Paragraph and Questions:</strong>
-                                    <div
+                                    <div                                onClick={handleBoxClick}
+
                                         className="option-box"
                                     >
                                         {/* Paragraph Image Section */}
@@ -108,7 +115,7 @@ const MCQ = ({
                                             <strong>Question {paraIndex + 1}:</strong>
                                             <div
                                                 className="option-box"
-                                                onPaste={(e) => handlePasteImage(e, index, "paragraph-question", paraIndex)} // Passing paraIndex as questionIndex
+                                                onPaste={(e) => handlePaste(e, index, "paragraph-question", paraIndex)} // Passing paraIndex as questionIndex
                                                 style={{ minHeight: '100px', border: '1px solid #ccc', padding: '10px' }}
                                             >
                                                 {q.paraquestionImage ? (
