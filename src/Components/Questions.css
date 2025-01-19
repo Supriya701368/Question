@@ -14,7 +14,9 @@ body {
     transition: margin-left 0.3s;
 
 }
-
+ img{
+    max-width:"100%"
+ }
 /* Sidebar Styles */
 .sidebar {
     width: 300px;

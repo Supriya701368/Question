@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import './Questions.css'; // Import the CSS file
-import { Document, Packer, Paragraph, ImageRun } from "docx";
+import { Document, Packer,PageBreak , Paragraph, ImageRun } from "docx";
 
 const MCQ = ({
     Questions,
+    handleParaQuestionPaste,
     handleSave,
     update,
     handleOptionPaste,
@@ -16,13 +17,8 @@ const MCQ = ({
     includeSolution,
     addOptionE,
 }) => {
-    const handleBoxClick = (e) => {
-        // Remove the `clicked` class from all elements
-        document.querySelectorAll('.option-box').forEach((box) => box.classList.remove('clicked'));
 
-        // Add the `clicked` class to the clicked element
-        e.currentTarget.classList.add('clicked');
-    };
+
 
     return (
         <div className="mcq-container">
@@ -46,8 +42,8 @@ const MCQ = ({
                             <div className="question-image-container">
                                 <h3>Paste Image for Question</h3>
                                 <div
-                                onClick={handleBoxClick}
-                                onPaste={(e) => {
+                                    className="option box"
+                                    onPaste={(e) => {
                                         const clipboardItems = e.clipboardData.items;
                                         for (let i = 0; i < clipboardItems.length; i++) {
                                             if (clipboardItems[i].type.startsWith("image/")) {
@@ -85,8 +81,23 @@ const MCQ = ({
                             {includeParagraph && (
                                 <div className="paragraph-section">
                                     <strong>Paragraph and Questions:</strong>
-                                    <div                                onClick={handleBoxClick}
-
+                                    <div
+                                        onPaste={(e) => {
+                                            const clipboardItems = e.clipboardData.items;
+                                            for (let i = 0; i < clipboardItems.length; i++) {
+                                                if (clipboardItems[i].type.startsWith("image/")) {
+                                                    const file = clipboardItems[i].getAsFile();
+                                                    const reader = new FileReader();
+                                                    reader.onload = () => {
+                                                        const updatedQuestions = [...Questions];
+                                                        updatedQuestions[index].paragraphImage = reader.result;
+                                                        update(updatedQuestions);
+                                                    };
+                                                    reader.readAsDataURL(file);
+                                                    break;
+                                                }
+                                            }
+                                        }}
                                         className="option-box"
                                     >
                                         {/* Paragraph Image Section */}
@@ -115,8 +126,7 @@ const MCQ = ({
                                             <strong>Question {paraIndex + 1}:</strong>
                                             <div
                                                 className="option-box"
-                                                onPaste={(e) => handlePaste(e, index, "paragraph-question", paraIndex)} // Passing paraIndex as questionIndex
-                                                style={{ minHeight: '100px', border: '1px solid #ccc', padding: '10px' }}
+                                                onPaste={(e) => { handleParaQuestionPaste(e, index, paraIndex) }}
                                             >
                                                 {q.paraquestionImage ? (
                                                     <>
@@ -166,6 +176,7 @@ const MCQ = ({
                                                     <img
                                                         src={option.image}
                                                         alt={`Option ${String.fromCharCode(65 + optionIndex)}`}
+                                                        style={{ maxWidth: '100%' }}
                                                     />
                                                     <button
                                                         onClick={() => handleRemoveImage(index, "option", optionIndex)}
@@ -181,13 +192,13 @@ const MCQ = ({
                                     </div>
                                 </div>
                             ))}
-                            {addOptionE && (
+                            {addOptionE && question.options.length < 5 && (
                                 <div className="option-item">
                                     <label>
                                         <input
                                             name="radio"
                                             type="radio"
-                                            value={question.optionE?.isCorrect}
+                                            value={question.options[4]?.isCorrect}
                                             onChange={(e) => handleAnswerChange(index, 4, e.target.checked)}
                                             className="option-box"
                                         />
@@ -195,11 +206,12 @@ const MCQ = ({
                                     </label>
                                     <div
                                         className="option-box"
-                                        onPaste={(e) => handleOptionPaste(e, index, optionIndex)}
-                                        >
-                                        {question.optionE?.image ? (
+                                        onPaste={(e) => handleOptionPaste(e, index, 4)}
+                                    >
+                                        {question.options[4]?.image ? (
                                             <>
-                                                <img src={question.optionE.image} alt="Option E" />
+                                                <img   style={{ maxWidth: '100%' }}
+                                                src={question.options[4].image} alt="Option E" />
                                                 <button
                                                     onClick={() => handleRemoveImage(index, "option-4")}
                                                     className="remove-button"
@@ -215,18 +227,20 @@ const MCQ = ({
                             )}
 
 
+
                             {/* Solution Image Section */}
                             <div className="solution-image-container">
                                 <h3>Paste Image for Solution</h3>
                                 <div
                                     className="option-box"
-                                    onPaste={(e) => handlePaste(e,index)}
-                                    >
+                                    onPaste={(e) => handlePaste(e, index)}
+                                >
                                     {question.solutionImage ? (
                                         <>
                                             <img
                                                 src={question.solutionImage}
                                                 alt={`Solution ${index + 1}`}
+                                                style={{ maxWidth: '100%' }}
                                             />
                                             <button
                                                 onClick={() => handleRemoveImage(index, "solution")}
@@ -246,13 +260,14 @@ const MCQ = ({
                             {includeSolution && (
                                 <div className="solution-section">
                                     <strong>Solution:</strong>
-                                    <div 
-                                   onPaste={(e) => handlePaste(e, index)}
+                                    <div
+                                        onPaste={(e) => handlePaste(e, index)}
 
                                     >
                                         {question.solutionImage ? (
                                             <>
                                                 <img
+                                                       style={{ maxWidth: '100%' }}
                                                     src={question.solutionImage}
                                                     alt={`Solution ${index + 1}`}
                                                 />
@@ -281,7 +296,7 @@ const MCQ = ({
                                 <input
                                     readOnly
                                     type="text"
-                                    value={question.answer}
+                                    value={question.answer}  // Ensure answer is an array before calling join
                                     onChange={(e) => handleAnswerChange(index, e.target.value)}
                                     className="answer-input"
                                 />
