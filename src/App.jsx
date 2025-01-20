@@ -215,43 +215,48 @@ const App = () => {
     switch (selectedQuestionType) {
         case "Mcq":
         case "Msq":
-            // Convert options into A, B, C, D format
+            // Keep original options but update the label (A, B, C, D)
             updatedQuestions[index].options = updatedQuestions[index].options.map((option, idx) => ({
-                label: String.fromCharCode(65 + idx), // Converts 0 -> 'A', 1 -> 'B', etc.
-                value: option.value || option, // Preserve the original option value
+                ...option,  // Keep the original option properties (including images)
+                label: String.fromCharCode(65 + idx),  // Convert index to label (A, B, C, D)
             }));
 
             if (selectedQuestionType === "Mcq") {
-                // Allow only one selection
+                // MCQ: Allow only one selection, update the answer
                 updatedQuestions[index].answer = String.fromCharCode(65 + newAnswer);
             } else if (selectedQuestionType === "Msq") {
-                // Ensure answer is an array
+                // MSQ: Multiple selections allowed, update the answer
                 if (!Array.isArray(updatedQuestions[index].answer)) {
                     updatedQuestions[index].answer = [];
                 }
 
-                if (updatedQuestions[index].answer.includes(String.fromCharCode(65 + newAnswer))) {
+                const newAnswerLabel = String.fromCharCode(65 + newAnswer);
+
+                if (updatedQuestions[index].answer.includes(newAnswerLabel)) {
                     // Remove if already selected (toggle)
-                    updatedQuestions[index].answer = updatedQuestions[index].answer.filter(ans => ans !== String.fromCharCode(65 + newAnswer));
+                    updatedQuestions[index].answer = updatedQuestions[index].answer.filter(ans => ans !== newAnswerLabel);
                 } else {
                     // Allow adding new selection only if less than 2 selected
                     if (updatedQuestions[index].answer.length < 2) {
-                        updatedQuestions[index].answer.push(String.fromCharCode(65 + newAnswer));
+                        updatedQuestions[index].answer.push(newAnswerLabel);
                     } else {
-                        alert("You can select only two options!"); // Restrict more than 2
+                        alert("You can select only two options!"); // Restrict more than 2 selections
                     }
                 }
             }
             break;
 
         default:
-            // Directly update answer for other question types
+            // Directly update answer for other question types (if applicable)
             updatedQuestions[index].answer = String.fromCharCode(65 + newAnswer);
-          }
+            break;
+    }
 
-    console.log(updatedQuestions[index]); // Debugging output
-    setQuestions(updatedQuestions);
+    // Debugging output
+    console.log(updatedQuestions[index]);
+    setQuestions(updatedQuestions); // Update the state with modified questions
 };
+
 
 
 
@@ -302,6 +307,7 @@ const App = () => {
       case "Msq":
         return (
           <MSQ
+          handleParaQuestionPaste={handleParaQuestionPaste}
             update={setQuestions}
             handlePaste={handlePaste}
             positiveMarks={positiveMarks}
@@ -322,6 +328,8 @@ const App = () => {
       case "Nit":
         return (
           <NIT
+          handleParaQuestionPaste={handleParaQuestionPaste}
+
             update={setQuestions}
             handlePaste={handlePaste}
             positiveMarks={positiveMarks}
@@ -342,6 +350,8 @@ const App = () => {
       case "True":
         return (
           <True
+          handleParaQuestionPaste={handleParaQuestionPaste}
+
             update={setQuestions}
             handlePaste={handlePaste}
             positiveMarks={positiveMarks}

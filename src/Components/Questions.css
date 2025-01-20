@@ -12,11 +12,8 @@ body {
     display: flex;
     min-height: 100vh;
     transition: margin-left 0.3s;
-
 }
- img{
-    max-width:"100%"
- }
+
 /* Sidebar Styles */
 .sidebar {
     width: 300px;
@@ -56,10 +53,16 @@ body {
     transition: border 0.3s;
 }
 
-.option-box.clicked {
-    background-color: thistle; /* Apply thistle color when clicked */
-    border-color: #6a0dad; /* Optional: Change border color for a better visual */
+.sidebar.open {
+    transform: translateX(0);
+    /* Sidebar is visible */
 }
+
+.sidebar.closed {
+    transform: translateX(-100%);
+    /* Sidebar is hidden */
+}
+
 .sidebar-toggle {
     font-size: 30px;
     position: fixed;
@@ -69,20 +72,8 @@ body {
     border: none;
     color: #333;
     cursor: pointer;
-  }
-.sidebar select:hover,
-.sidebar select:focus {
-    border-color: #90e4ff;
 }
-.sidebar.open {
-    transform: translateX(0);
-    /* Sidebar is visible */
-  }
-  
-  .sidebar.closed {
-    transform: translateX(-100%);
-    /* Sidebar is hidden */
-  }
+
 /* Checkbox group */
 .checkbox-group {
     margin-top: 30px;
@@ -137,31 +128,6 @@ body {
 .checkbox-group input[type="checkbox"]:focus {
     outline: 2px solid #90e4ff;
     outline-offset: 2px;
-}
-.toggler {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 24px;
-    cursor: pointer;
-  }
-
-/* Sidebar toggle button (hidden by default) */
-.sidebar-toggle {
-    display: none;
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    padding: 10px;
-    font-size: 20px;
-    cursor: pointer;
-}
-
-.sidebar-toggle:focus {
-    outline: none;
 }
 
 /* Main content styles */
@@ -290,20 +256,21 @@ body {
     text-align: center;
     margin-top: 10px;
 }
+
 .marks-container {
     display: flex;
     align-items: center;
     margin: 44px 0;
     font-size: 14px; /* Decrease label font size */
-  }
-  
-  .marks-container label {
+}
+
+.marks-container label {
     margin-right: 10px;
     font-weight: bold;
-    color: #ead8d8#333; /* Optional: Change label color */
-  }
-  
-  .marks-container input {
+    color: #ead8d8; /* Optional: Change label color */
+}
+
+.marks-container input {
     width: 50px; /* Decrease input width */
     height: 25px; /* Decrease input height */
     margin-right: 5px;
@@ -311,8 +278,7 @@ body {
     border-radius: 5px;
     padding: 2px 5px;
     font-size: 12px; /* Adjust input font size */
-  }
-  
+}
 
 .box.active {
     border-color: #28a745;
@@ -321,6 +287,14 @@ body {
 .zoom-img {
     max-width: 100%;
     height: auto;
+}
+.option-box.active {
+    border: 2px solid #4caf50; /* Example active border color */
+    background-color: #e8f5e9; /* Example background color for active state */
+}
+.clicked {
+    border: 2px solid #00b3b3; /* Add a border when clicked */
+    background-color: rgba(0, 179, 179, 0.2); /* Add a background color to show it's clicked */
 }
 
 .remove-button {
@@ -355,6 +329,8 @@ body {
     padding: 10px;
     text-align: center;
     margin-top: 10px;
+    margin-bottom: 11px;
+    margin-right: 9px;
 }
 
 .answer-container {
@@ -397,6 +373,50 @@ body {
 }
 
 /* Sidebar responsiveness */
+@media (max-width: 1200px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        transform: translateX(-100%);
+    }
+
+    .sidebar-toggle {
+        display: block;
+    }
+
+    .main-content {
+        margin-left: 0;
+        padding: 15px;
+    }
+
+    .sidebar.show {
+        transform: translateX(0);
+    }
+
+    .sidebar select {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .checkbox-group {
+        gap: 15px;
+    }
+
+    .sidebar h3 {
+        font-size: 18px;
+    }
+
+    .checkbox-group label {
+        font-size: 16px;
+    }
+}
+
+/* Tablet view (portrait) */
 @media (max-width: 768px) {
     .container {
         flex-direction: column;
@@ -422,7 +442,6 @@ body {
         transform: translateX(0);
     }
 
-    /* Reduce padding and font size for mobile */
     .sidebar select {
         font-size: 14px;
         padding: 8px;
@@ -439,9 +458,57 @@ body {
     .checkbox-group label {
         font-size: 16px;
     }
+
+    .marks-container {
+        font-size: 12px;
+    }
+
+    .marks-container input {
+        width: 40px;
+        height: 20px;
+    }
 }
 
-/* Toggle sidebar visibility */
-.sidebar.show {
-    transform: translateX(0);
+/* Mobile View */
+@media (max-width: 480px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        position: relative;
+        transform: translateX(-100%);
+    }
+
+    .main-content {
+        margin-left: 0;
+        padding: 15px;
+    }
+
+    .sidebar.show {
+        transform: translateX(0);
+    }
+
+    .sidebar select {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .checkbox-group label {
+        font-size: 14px;
+    }
+
+    .marks-container {
+        font-size: 12px;
+    }
+
+    .marks-container input {
+        width: 35px;
+        height: 20px;
+    }
+
+    .sidebar h3 {
+        font-size: 18px;
+    }
 }

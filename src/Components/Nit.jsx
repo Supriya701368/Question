@@ -1,4 +1,5 @@
 import './Questions.css'; // Import the CSS file
+import { useEffect,useState } from 'react';
 
 const NIT = ({
     Questions,
@@ -15,7 +16,40 @@ const NIT = ({
     includeSolution,
     addOptionE,
 }) => {
+ const [clickedBox, setClickedBox] = useState(null); // Track the clicked box
 
+    const clearImages = () => {
+        const updatedQuestions = [...Questions].map(question => {
+            return {
+                ...question,
+                questionImage: null,
+                paragraphImage: null,
+                paraquestions: question.paraquestions.map(q => ({
+                    ...q,
+                    paraquestionImage: null,
+                })),
+                answer:"",
+                solutionImage: null,
+                options: question.options.map(option => ({
+                    ...option,
+                    image: null,
+                })),
+            };
+        });
+        update(updatedQuestions); // Update the state with cleared images
+    };
+
+    const handleSaveWithClear = (data) => {
+        handleSave(data);  // Call the original save function
+        clearImages();     // Clear images after saving
+    };
+    const handleBoxClick = (index, paraIndex) => {
+        setClickedBox(`paraquestion-${index}-${paraIndex}`);
+    };
+
+    const handleClickBox = (boxName) => {
+        setClickedBox(boxName); // Set clicked box to highlight it
+    };
 
 
     return (
@@ -40,7 +74,8 @@ const NIT = ({
                             <div className="question-image-container">
                                 <h3>Paste Image for Question</h3>
                                 <div
-                                    className="option box"
+                                    className={`option box ${clickedBox === `question-${index}` ? 'clicked' : ''}`}
+                                    onClick={() => handleClickBox(`question-${index}`)} // Handle the click event
                                     onPaste={(e) => {
                                         const clipboardItems = e.clipboardData.items;
                                         for (let i = 0; i < clipboardItems.length; i++) {
@@ -80,6 +115,8 @@ const NIT = ({
                                 <div className="paragraph-section">
                                     <strong>Paragraph and Questions:</strong>
                                     <div
+                                      className={`option-box ${clickedBox === `paragraph-${index}` ? 'clicked' : ''}`}
+                                      onClick={() => handleClickBox(`paragraph-${index}`)} // Handle the click event
                                         onPaste={(e) => {
                                             const clipboardItems = e.clipboardData.items;
                                             for (let i = 0; i < clipboardItems.length; i++) {
@@ -96,7 +133,6 @@ const NIT = ({
                                                 }
                                             }
                                         }}
-                                        className="option-box"
                                     >
                                         {/* Paragraph Image Section */}
                                         {Questions[index].paragraphImage ? (
@@ -123,7 +159,8 @@ const NIT = ({
                                         <div key={paraIndex} className="question-section">
                                             <strong>Question {paraIndex + 1}:</strong>
                                             <div
-                                                className="option-box"
+                                                onClick={() => handleBoxClick(index, paraIndex)} // Handle click on para-question box
+                                                className={`option-box ${clickedBox === `paraquestion-${index}-${paraIndex}` ? "clicked" : ""}`}
                                                 onPaste={(e) => { handleParaQuestionPaste(e, index, paraIndex) }}
                                             >
                                                 {q.paraquestionImage ? (
@@ -157,12 +194,13 @@ const NIT = ({
                                             type="radio"
                                             value={question.options[4]?.isCorrect}
                                             onChange={(e) => handleAnswerChange(index, 4, e.target.checked)}
-                                            className="option-box"
+                                            
                                         />
                                         Option E
                                     </label>
                                     <div
-                                        className="option-box"
+                                       className={`option-box ${clickedBox === `option-${index}-${optionIndex}` ? 'clicked' : ''}`}
+                                       onClick={() => handleClickBox(`option-${index}-${optionIndex}`)} // Handle the click event
                                         onPaste={(e) => handleOptionPaste(e, index, 4)}
                                     >
                                         {question.options[4]?.image ? (
@@ -188,7 +226,8 @@ const NIT = ({
                             <div className="solution-image-container">
                                 <h3>Paste Image for Solution</h3>
                                 <div
-                                    className="option-box"
+                                   className={`option-box ${clickedBox === `solution-${index}` ? 'clicked' : ''}`}
+                                   onClick={() => handleClickBox(`solution-${index}`)} // Handle the click event
                                     onPaste={(e) => handlePaste(e, index)}
                                 >
                                     {question.solutionImage ? (
@@ -216,6 +255,8 @@ const NIT = ({
                                 <div className="solution-section">
                                     <strong>Solution:</strong>
                                     <div
+                                     className={`option-box ${clickedBox === `solution-${index}` ? 'clicked' : ''}`}
+                                     onClick={() => handleClickBox(`solution-${index}`)} // Handle the click event
                                         onPaste={(e) => handlePaste(e, index)}
 
                                     >
@@ -267,7 +308,7 @@ const NIT = ({
                     Add New Question
                 </button>
                 <button
-                    onClick={(data) => { handleSave(data) }}
+                  onClick={(data) => handleSaveWithClear(data)}
                     className="save-button"
                 >
                     Save Document

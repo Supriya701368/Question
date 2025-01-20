@@ -1,6 +1,7 @@
 
 import './Questions.css'; // Import the CSS file
 
+import { useEffect,useState } from 'react';
 
 const True = ({
   Questions,
@@ -17,8 +18,40 @@ const True = ({
   includeSolution,
   addOptionE,
 }) => {
+ const [clickedBox, setClickedBox] = useState(null); // Track the clicked box
 
+    const clearImages = () => {
+        const updatedQuestions = [...Questions].map(question => {
+            return {
+                ...question,
+                questionImage: null,
+                paragraphImage: null,
+                paraquestions: question.paraquestions.map(q => ({
+                    ...q,
+                    paraquestionImage: null,
+                })),
+                answer:"",
+                solutionImage: null,
+                options: question.options.map(option => ({
+                    ...option,
+                    image: null,
+                })),
+            };
+        });
+        update(updatedQuestions); // Update the state with cleared images
+    };
 
+    const handleSaveWithClear = (data) => {
+        handleSave(data);  // Call the original save function
+        clearImages();     // Clear images after saving
+    };
+    const handleBoxClick = (index, paraIndex) => {
+        setClickedBox(`paraquestion-${index}-${paraIndex}`);
+    };
+
+    const handleClickBox = (boxName) => {
+        setClickedBox(boxName); // Set clicked box to highlight it
+    };
 
   return (
     <div className="mcq-container">
@@ -42,7 +75,8 @@ const True = ({
               <div className="question-image-container">
                 <h3>Paste Image for Question</h3>
                 <div
-                  className="option box"
+                  className={`option box ${clickedBox === `question-${index}` ? 'clicked' : ''}`}
+                  onClick={() => handleClickBox(`question-${index}`)} // Handle the click event
                   onPaste={(e) => {
                     const clipboardItems = e.clipboardData.items;
                     for (let i = 0; i < clipboardItems.length; i++) {
@@ -82,6 +116,8 @@ const True = ({
                 <div className="paragraph-section">
                   <strong>Paragraph and Questions:</strong>
                   <div
+                   className={`option-box ${clickedBox === `paragraph-${index}` ? 'clicked' : ''}`}
+                   onClick={() => handleClickBox(`paragraph-${index}`)} // Handle the click event
                     onPaste={(e) => {
                       const clipboardItems = e.clipboardData.items;
                       for (let i = 0; i < clipboardItems.length; i++) {
@@ -98,7 +134,7 @@ const True = ({
                         }
                       }
                     }}
-                    className="option-box"
+                    
                   >
                     {/* Paragraph Image Section */}
                     {Questions[index].paragraphImage ? (
@@ -125,7 +161,8 @@ const True = ({
                     <div key={paraIndex} className="question-section">
                       <strong>Question {paraIndex + 1}:</strong>
                       <div
-                        className="option-box"
+                        onClick={() => handleBoxClick(index, paraIndex)} // Handle click on para-question box
+                        className={`option-box ${clickedBox === `paraquestion-${index}-${paraIndex}` ? "clicked" : ""}`}
                         onPaste={(e) => { handleParaQuestionPaste(e, index, paraIndex) }}
                       >
                         {q.paraquestionImage ? (
@@ -219,7 +256,8 @@ const True = ({
               <div className="solution-image-container">
                 <h3>Paste Image for Solution</h3>
                 <div
-                  className="option-box"
+                 className={`option-box ${clickedBox === `solution-${index}` ? 'clicked' : ''}`}
+                 onClick={() => handleClickBox(`solution-${index}`)} // Handle the click event
                   onPaste={(e) => handlePaste(e, index)}
                 >
                   {question.solutionImage ? (
@@ -247,6 +285,8 @@ const True = ({
                 <div className="solution-section">
                   <strong>Solution:</strong>
                   <div
+                   className={`option-box ${clickedBox === `solution-${index}` ? 'clicked' : ''}`}
+                   onClick={() => handleClickBox(`solution-${index}`)} // Handle the click event
                     onPaste={(e) => handlePaste(e, index)}
 
                   >
@@ -298,8 +338,8 @@ const True = ({
           Add New Question
         </button>
         <button
-          onClick={(data) => { handleSave(data) }}
-          className="save-button"
+                    onClick={(data) => handleSaveWithClear(data)}
+                    className="save-button"
         >
           Save Document
         </button>
